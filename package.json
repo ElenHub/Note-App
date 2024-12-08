@@ -12,8 +12,8 @@
     "test": "jest",
     "storybook": "storybook dev -p 9009",
     "build-storybook": "storybook build",
-"predeploy": "npm run build",
-"deploy": "gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@emotion/react": "^11.13.5",
@@ -23,6 +23,7 @@
     "@mui/x-date-pickers": "^7.22.3",
     "@mui/x-date-pickers-pro": "^7.22.3",
     "@reduxjs/toolkit": "^2.4.0",
+    "axios": "^1.7.9",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "icons": "^1.0.0",

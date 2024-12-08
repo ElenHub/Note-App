@@ -2,7 +2,7 @@ import  React, { useCallback } from 'react';
 import { useState } from "react";
 import { Link } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
-import { Checkbox, TextField, IconButton, Box, Typography } from "@mui/material";
+import { Checkbox, TextField, IconButton, Box, Typography, CircularProgress } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -18,6 +18,7 @@ import TaskInput from '../TaskInput/TaskInput';
 import TaskList from '../TaskList/TaskList';
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import { BackButton } from '../BackButton/BackButton';
+import useLoadNotes from '../../hooks/useLoadNotes';
 
   interface Task {
     id: string
@@ -32,7 +33,7 @@ export default function BasicDateRangeCalendar(props:ToggleStyleType) {
     const {createTask, removeTask, toggleTaskStatus, editTaskTitle}=useTasks()
     const [open, setOpen] = useState(false);
     const [taskIdToRemove, setTaskIdToRemove] =  useState<string | null>(null);
-
+    const loading = useLoadNotes(); 
     const addTask = useCallback((title: string) => {
         if (title.trim()) { 
             createTask({ title, date: selectedDate.format('YYYY-MM-DD') }); // Добавить дату задачи
@@ -108,7 +109,11 @@ export default function BasicDateRangeCalendar(props:ToggleStyleType) {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <TaskInput addTask={addTask} toggleStyle={props.toggleStyle.iconColor}/>
                 </Box>
-                <TaskList tasks={tasks.filter(task => task.date === selectedDate.format('YYYY-MM-DD'))} toggleCompletion={toggleCompletion} color={props.toggleStyle.textColor} changeTaskTitle={changeTaskTitle} handleOpen={handleOpen} />
+                {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+            <CircularProgress color='warning'/>
+        </Box>
+      ) : <TaskList tasks={tasks.filter(task => task.date === selectedDate.format('YYYY-MM-DD'))} toggleCompletion={toggleCompletion} color={props.toggleStyle.textColor} changeTaskTitle={changeTaskTitle} handleOpen={handleOpen} />}
             </Box>
          <ConfirmationDialog open={open}
                 handleClose={handleClose}
