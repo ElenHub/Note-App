@@ -1,21 +1,35 @@
-
 import { useEffect, useState } from "react";
+import { notesAPI } from "../api/notes-api"; // Импортируйте ваш notesAPI
+import useNotes from "./useNotes";
+import { useDispatch } from 'react-redux';
+import { setNotes } from '../redux/features/notesSlice';
 
 const useLoadNotes = () => {
-  const [loading, setLoading] = useState(true);
+    const { notes } = useNotes(); // Получаем заметки из useNotes
+    const [loading, setLoading] = useState(true); // Добавляем состояние загрузки
+    const dispatch = useDispatch(); // Получаем dispatch
 
-  const loadNotes = async () => {
-    setLoading(true);
-    // Имитация задержки загрузки данных
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setLoading(false);
-  };
+    useEffect(() => {
+        const loadNotes = async () => {
+            const savedNotes = localStorage.getItem('notes');
+            if (savedNotes) {
+                dispatch(setNotes(JSON.parse(savedNotes))); // Используем dispatch для обновления состояния
+            } else {
+                try {
+                    const response = await notesAPI.getNotes();
+                    dispatch(setNotes(response.data)); // Используем dispatch для обновления состояния
+                    localStorage.setItem('notes', JSON.stringify(response.data)); // Сохраняем загрузку в локальное хранилище
+                } catch (error) {
+                    console.error('Ошибка при загрузке заметок:', error);
+                }
+            }
+            setLoading(false); // Устанавливаем состояние загрузки в false после завершения загрузки
+        };
 
-  useEffect(() => {
-    loadNotes();
-  }, []);
+        loadNotes();
+    }, [dispatch]);
 
-  return loading;
+    return { loading, notes }; // Возвращаем loading и notes
 };
 
 export default useLoadNotes;

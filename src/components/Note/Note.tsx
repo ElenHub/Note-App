@@ -21,37 +21,48 @@ interface NoteProps {
     };
     iconColor: string;
   };
-  setNotes: (notes: NoteType[]) => void;
-  notes: NoteType[];
 }
 
-const Note: React.FC<NoteProps> = (props) => {
+const Note: React.FC<NoteProps> = React.memo((props) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const loading = useLoadNotes(); // Используем хук для отслеживания загрузки
-  const notes = useSelector((state: { notes: NotesState }) => state.notes.notes) || [];
+  const { loading, notes: loadedNotes } = useLoadNotes(); // Используем хук для отслеживания загрузки
+  const reduxNotes = useSelector((state: { notes: NotesState }) => state.notes.notes) || []; // Заметки из Redux
   const [filteredNotes, setFilteredNotes] = useState<NoteType[]>([]);
 
   useEffect(() => {
-    if (Array.isArray(notes)) {
-      const filtered = notes.filter(note =>
+    const allNotes = loadedNotes.length > 0 ? loadedNotes : reduxNotes; // Используем загруженные заметки или заметки из Redux
+    if (Array.isArray(allNotes)) {
+      const filtered = allNotes.filter(note =>
         note.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredNotes(filtered);
     }
-  }, [notes, searchTerm]);
+  }, [loadedNotes, reduxNotes, searchTerm]);
 
   return (
     <>
-      <Header isBeer={props.isBeer} handleToggleDarkMode={props.handleToggleDarkMode} toggleStyle={props.toggleStyle} darkMode={props.darkMode} />
-      <Search notes={props.notes} setSearchTerm={setSearchTerm} toggleStyle={props.toggleStyle} />
+      <Header 
+        isBeer={props.isBeer} 
+        handleToggleDarkMode={props.handleToggleDarkMode} 
+        toggleStyle={props.toggleStyle} 
+      />
+      <Search 
+        notes={filteredNotes} 
+        setSearchTerm={setSearchTerm} 
+        toggleStyle={props.toggleStyle} 
+      />
       {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-            <CircularProgress color='warning'/>
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+          <CircularProgress color='warning' />
         </Box>
       ) : (
         <>
           {filteredNotes.length === 0 && (
-            <Typography variant="body1" color={props.toggleStyle.textColor} align="center" sx={{ margin: 2 }}>
+            <Typography 
+              variant="body1" 
+              color={props.toggleStyle.textColor} 
+              align="center" 
+              sx={{ margin: 2 }}>
               No notes found
             </Typography>
           )}
@@ -60,12 +71,10 @@ const Note: React.FC<NoteProps> = (props) => {
               <Grid item xs={12} sm={6} md={4} key={note.id}>
                 <NoteItem
                   note={note}
-                  setNotes={props.setNotes}
-                  notes={props.notes}
                   toggleStyle={props.toggleStyle}
                   sx={{
                     backgroundColor: props.toggleStyle.backgroundColor,
-                    color: props.toggleStyle.color,
+                    color: props.toggleStyle.textColor,
                     borderRadius: '8px',
                     boxShadow: 2,
                     padding: 2,
@@ -101,8 +110,6 @@ const Note: React.FC<NoteProps> = (props) => {
       </Box>
     </>
   );
-};
+});
 
 export default Note;
-
-

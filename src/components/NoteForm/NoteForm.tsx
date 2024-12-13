@@ -10,7 +10,7 @@ interface NoteFormProps {
  fontColor: string;
 }
 
-const NoteForm = (props) => {
+const NoteForm: React.FC<NoteFormProps> = (props) => {
   return (
     <form className="create-note__form" onSubmit={props.onSubmit}>
       <TextField
@@ -34,7 +34,6 @@ const NoteForm = (props) => {
            
           },
         }}
-        
      />
      
       <TextField
@@ -43,12 +42,12 @@ const NoteForm = (props) => {
         onChange={(e) => props.onChange('details', e.target.value)}
         multiline
         rows={1.3}
-        style={{ color: props.fontColor }}
         error={Boolean(props.errors.details)}
         helperText={props.errors.details}
         fullWidth
         InputProps={{
           sx: {
+            color:props.fontColor,
               borderRadius:'14px',
             background: 'var(--body-color)',
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {

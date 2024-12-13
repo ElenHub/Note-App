@@ -28,6 +28,8 @@ export interface TaskType {
     title: string;
     isDone: boolean;
     date: string;
+    dueDate: string;
+    
 }
 
 export interface ToggleStyleType {

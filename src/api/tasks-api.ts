@@ -11,10 +11,20 @@ export const tasksAPI={
     deleteTasks(id:string){
         return instance.delete(`tasks/${id}`)
     },
-    createTasks(title:string,){
-       return instance.post("tasks", {title})
+    createTasks(title:string){
+       return instance.post("tasks", {title })
     },
-    updateTasks(id:string, title:string,){
+    // toggleTask(id:string){
+    //     return instance.post("tasks")
+    //  },\
+    toggleTask(id: string, isDone: boolean) {
+    return instance.patch(`tasks/${id}`, { isDone }); // Используем PATCH для обновления статуса
+},
+
+    updateTasks(id:string, title:string){
         return instance.put(`tasks/${id}`, {title})
+    },
+    updateDate(id:string, newDate:string){
+        return instance.put(`tasks/${id}`, {date:newDate})
     },
 }

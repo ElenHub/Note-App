@@ -11,10 +11,10 @@ export const notesAPI={
     deleteNotes(id:string){
         return instance.delete(`notes/${id}`)
     },
-    createNotes(title:string, details:string){
-       return instance.post("notes",  { title, details })
+    createNotes(title: string, details: string, color: string, fontColor: string, category:string ){
+       return instance.post("notes",  { title, details, color, fontColor, category})
     },
-    updateNotes(id:string, title:string, details:string){
-        return instance.put(`notes/${id}`,  { title, details })
+    updateNotes(id:string, title: string, details: string, color: string, fontColor: string, category:string ){
+        return instance.put(`notes/${id}`,  { title, details, color, fontColor, category })
     },
 }
