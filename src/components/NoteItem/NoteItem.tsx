@@ -21,6 +21,8 @@ const NoteItem:React.FC<NoteItemProps> = (props) => {
         setOpen(false); // Закрыть диалог
     };
 
+   
+
     const handleOpen = (id: string) => {
         setNoteToDelete(id); // Установить ID для удаления
         setOpen(true); // Открыть диалог

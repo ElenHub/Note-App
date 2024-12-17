@@ -12,10 +12,10 @@ interface NoteFormProps {
 
 const NoteForm: React.FC<NoteFormProps> = (props) => {
   return (
-    <form className="create-note__form" onSubmit={props.onSubmit}>
+    <form onSubmit={props.onSubmit}>
       <TextField
-      variant="outlined"
         label="Title"
+        color='transparent' 
         value={props.title}
         onChange={(e) => props.onChange('title', e.target.value)} 
         error={Boolean(props.errors.title)}
@@ -25,19 +25,13 @@ const NoteForm: React.FC<NoteFormProps> = (props) => {
         InputProps={{
           sx: {
             borderRadius:'14px',
-            background: 'var(--body-color)',
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: props.toggleStyle.iconColor,
-              color:props.toggleStyle.iconColor,
-            
             }
-           
-          },
         }}
      />
      
       <TextField
         label="Details"
+        color='transparent' 
         value={props.details}
         onChange={(e) => props.onChange('details', e.target.value)}
         multiline
@@ -47,19 +41,13 @@ const NoteForm: React.FC<NoteFormProps> = (props) => {
         fullWidth
         InputProps={{
           sx: {
-            color:props.fontColor,
               borderRadius:'14px',
-            background: 'var(--body-color)',
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: props.toggleStyle.iconColor,
-              color:props.toggleStyle.iconColor,
             }
-          },
         }}
   />
 
 
- <Button  sx={{borderRadius:'30px', backgroundColor: props.toggleStyle.iconHover.backgroundColor, color: props.toggleStyle.iconColor, marginBottom:'20px', marginTop:'20px'}} type="submit" variant="contained" color="primary" fullWidth>
+ <Button  sx={{borderRadius:'30px', backgroundColor: props.toggleStyle.backgroundColor, color: props.toggleStyle.iconColor, marginBottom:'20px', marginTop:'20px'}} type="submit" variant="contained" color="primary" fullWidth>
 Submit
 </Button>  
 

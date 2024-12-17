@@ -6,14 +6,15 @@ import './Search.module.css';
 interface SearchProps {
   // setSearchTerm: (term: string) => void; // Функция для обновления состояния поиска
   toggleStyle: {
-    iconColor: string; // Цвет иконки
+    iconColor: string;
   };
 }
 
 const Search: React.FC<SearchProps> = (props) => {
-  const handleInputChange = (event) => {
-    const value = event.target.value; // Это значение, введенное пользователем в поле
-    props.setSearchTerm(value); // Обновляет состояние `searchTerm` в родительском компоненте
+    // Handle the change in input field
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value; 
+    props.setSearchTerm(value); // Call the passed function to update the search term
   };
 
   return (
@@ -32,7 +33,7 @@ const Search: React.FC<SearchProps> = (props) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <MdSearch size='1.3rem'  /> {/* Устанавливаем цвет иконки */}
+              <MdSearch size='1.3rem'  /> 
             </InputAdornment>
           ),
           sx: {
@@ -42,17 +43,17 @@ const Search: React.FC<SearchProps> = (props) => {
           },
         }}
         sx={{
-          width: '100%', // Можно настроить ширину по необходимости
+          width: '100%',
           '& .MuiOutlinedInput-root': {
-            borderRadius: '100px', // Закругление углов
+            borderRadius: '100px', 
             '& fieldset': {
-              borderColor: props.toggleStyle.iconColor, // Устанавливаем цвет рамки
+              borderColor: props.toggleStyle.iconColor,
             },
             '&:hover fieldset': {
-              borderColor: props.toggleStyle.iconColor, // Цвет рамки при наведении
+              borderColor: props.toggleStyle.iconColor, 
             },
             '&.Mui-focused fieldset': {
-              borderColor: props.toggleStyle.iconColor, // Цвет рамки при фокусе
+              borderColor: props.toggleStyle.iconColor, 
             },
           },
         }}

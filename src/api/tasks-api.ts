@@ -1,30 +1,14 @@
-import axios from "axios"
+import axios from "axios";
 
-const instance=axios.create({
-    baseURL:'http://localhost:5000/api/',
-})
+const instance = axios.create({
+    baseURL: 'http://localhost:5000/api/',
+});
 
-export const tasksAPI={
-    getTasks(){
-    return instance.get("tasks")
-    },
-    deleteTasks(id:string){
-        return instance.delete(`tasks/${id}`)
-    },
-    createTasks(title:string){
-       return instance.post("tasks", {title })
-    },
-    // toggleTask(id:string){
-    //     return instance.post("tasks")
-    //  },\
-    toggleTask(id: string, isDone: boolean) {
-    return instance.patch(`tasks/${id}`, { isDone }); // Используем PATCH для обновления статуса
-},
-
-    updateTasks(id:string, title:string){
-        return instance.put(`tasks/${id}`, {title})
-    },
-    updateDate(id:string, newDate:string){
-        return instance.put(`tasks/${id}`, {date:newDate})
-    },
-}
+export const tasksAPI = {
+    getTasks: () => instance.get("tasks"),   // Function to get all tasks
+    deleteTasks: (id: string) => instance.delete(`tasks/${id}`),   // Function to delete a task by its ID
+    createTasks: (title: string) => instance.post("tasks", { title }),   // Function to create a new task with a title
+    toggleTask: (id: string, isDone: boolean) => instance.patch(`tasks/${id}`, { isDone }),   // Function to toggle the completion status of a task
+    updateTasks: (id: string, title: string) => instance.put(`tasks/${id}`, { title }),   // Function to update the title of an existing task by its ID
+    updateDate: (id: string, newDate: string) => instance.put(`tasks/${id}`, { date: newDate }),     // Function to update the date of a task by its ID
+};

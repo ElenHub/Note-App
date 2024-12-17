@@ -8,10 +8,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { useSelector } from "react-redux";
 import { NotesState } from "../../redux/features/notesSlice";
 import { NoteType } from "../../types/type";
-import useLoadNotes from "../../hooks/useLoadNotes"; // Импортируйте ваш кастомный хук
+import useLoadNotes from "../../hooks/useLoadNotes"; 
 
 interface NoteProps {
-  isBeer: boolean;
+  darkMode: boolean;
   handleToggleDarkMode: () => void;
   toggleStyle: {
     backgroundColor: string;
@@ -25,15 +25,16 @@ interface NoteProps {
 
 const Note: React.FC<NoteProps> = React.memo((props) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { loading, notes: loadedNotes } = useLoadNotes(); // Используем хук для отслеживания загрузки
-  const reduxNotes = useSelector((state: { notes: NotesState }) => state.notes.notes) || []; // Заметки из Redux
+  const { loading, notes: loadedNotes } = useLoadNotes(); 
+  const reduxNotes = useSelector((state: { notes: NotesState }) => state.notes.notes) || []; 
   const [filteredNotes, setFilteredNotes] = useState<NoteType[]>([]);
 
+    // Effect to filter notes whenever loaded notes, redux notes, or search term change
   useEffect(() => {
-    const allNotes = loadedNotes.length > 0 ? loadedNotes : reduxNotes; // Используем загруженные заметки или заметки из Redux
+    const allNotes = loadedNotes.length > 0 ? loadedNotes : reduxNotes; 
     if (Array.isArray(allNotes)) {
       const filtered = allNotes.filter(note =>
-        note.title.toLowerCase().includes(searchTerm.toLowerCase())
+            note.title && note.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredNotes(filtered);
     }
@@ -42,7 +43,7 @@ const Note: React.FC<NoteProps> = React.memo((props) => {
   return (
     <>
       <Header 
-        isBeer={props.isBeer} 
+        darkMode={props.darkMode} 
         handleToggleDarkMode={props.handleToggleDarkMode} 
         toggleStyle={props.toggleStyle} 
       />
@@ -85,6 +86,7 @@ const Note: React.FC<NoteProps> = React.memo((props) => {
           </Grid>
         </>
       )}
+        {/* Button to create a new note */}
       <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
         <Link to="/create" style={{ textDecoration: 'none' }}>
           <IconButton

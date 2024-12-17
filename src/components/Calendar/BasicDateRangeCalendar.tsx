@@ -4,13 +4,13 @@ import { Box, Typography } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { toast, ToastContainer } from "react-toastify";
 import dayjs from "dayjs";
 import useTasks from "../../hooks/useTasks";
 import TaskInput from "../TaskInput/TaskInput";
 import TaskList from "../TaskList/TaskList";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import { BackButton } from "../BackButton/BackButton";
+import { ToggleStyleType } from "../../types/type";
 
 interface Task {
   id: string;
@@ -27,6 +27,7 @@ export default function BasicDateRangeCalendar(props) {
   const [taskIdToRemove, setTaskIdToRemove] = useState<string | null>(null);
   const [notificationTimes, setNotificationTimes] = useState<{[key: string]: string}>({});
 
+   // Function to add a new task
   const addTask = useCallback(
     (title: string) => {
       if (title.trim()) {
@@ -36,16 +37,19 @@ export default function BasicDateRangeCalendar(props) {
     [createTask, selectedDate]
   );
 
+  // Function to open the confirmation dialog
   const handleOpen = useCallback((id: string) => {
     setTaskIdToRemove(id);
     setOpen(true);
   }, []);
 
+   // Function to close the confirmation dialog
   const handleClose = useCallback(() => {
     setOpen(false);
     setTaskIdToRemove(null);
   }, []);
 
+    // Function to remove a task
   const handleRemoveTask = useCallback(() => {
     if (taskIdToRemove) {
       removeTask(taskIdToRemove);
@@ -53,6 +57,7 @@ export default function BasicDateRangeCalendar(props) {
     handleClose();
   }, [removeTask, taskIdToRemove, handleClose]);
 
+    // Function to toggle task completion status
   const toggleCompletion = useCallback(
     (id: string, newStatus: boolean) => {
       toggleTaskStatus(id, newStatus);
@@ -60,6 +65,7 @@ export default function BasicDateRangeCalendar(props) {
     [toggleTaskStatus]
   );
 
+   // Function to change the title of a task
   const changeTaskTitle = useCallback(
     (id: string, newTitle: string) => {
       editTaskTitle(id, newTitle);
@@ -67,6 +73,7 @@ export default function BasicDateRangeCalendar(props) {
     [editTaskTitle]
   );
 
+  // Function to handle time change for notifications
   const handleTimeChange = (taskId: string, newTime: string | null) => {
     if (newTime) {
       setNotificationTimes((prev) => ({ ...prev, [taskId]: newTime }));
@@ -81,11 +88,7 @@ export default function BasicDateRangeCalendar(props) {
           sx={{
             backgroundColor: props.toggleStyle.backgroundColor,
             padding: 3,
-            borderRadius: 2,
-            width: "100%",
-            maxWidth: "800px",
-            margin: "0 auto",
-            boxShadow: 3,
+            borderRadius: 2
           }}
         >
           <DateCalendar
@@ -97,29 +100,32 @@ export default function BasicDateRangeCalendar(props) {
               borderRadius: 2,
               '& .MuiPickersDay-root.Mui-selected': {
                 backgroundColor: 'var(--orange-color)',
-                color: 'white', // Цвет текста для выделенного дня
+                color: 'white', 
               },
               '& .MuiPickersDay-root.Mui-selected:hover': {
-                backgroundColor: 'rgb(176, 92, 31)',
+                   backgroundColor: 'rgb(176, 92, 31)'
               },
               '& .MuiPickersDay-root.Mui-selected:focus': {
-                backgroundColor: 'rgb(176, 92, 31)',
+                   backgroundColor: 'rgb(176, 92, 31)'
               },
               '& .MuiPickersYear-yearButton.Mui-selected': {
                 backgroundColor: 'rgb(176, 92, 31)',
-                color: 'white', // Цвет текста для выделенной кнопки года
+                color: 'white', 
               },
               '& .MuiPickersYear-yearButton.Mui-selected:hover': {
-                backgroundColor: 'rgb(176, 92, 31)'
+                backgroundColor: 'rgb(176, 92, 31)',
               },
               '& .MuiPickersYear-yearButton.Mui-selected:focus': {
-                backgroundColor: 'rgb(176, 92, 31)'
+                backgroundColor: 'rgb(176, 92, 31)',
+              },
+              '& .MuiButtonBase-root:hover': {
+                backgroundColor: 'rgb(189, 99, 35)'
               },
               '& .MuiButtonBase-root': {
-                backgroundColor: props.toggleStyle.backgroundColor, // Установите фон для кнопок
+                backgroundColor: props.toggleStyle.backgroundColor,
               },
               '& .MuiIconButton-root': {
-                margin: '0 4px', // Увеличьте отступ между значками
+                margin: '0 4px',
               },
               color: 'black',
             }}
@@ -127,11 +133,11 @@ export default function BasicDateRangeCalendar(props) {
         </Box>
       </LocalizationProvider>
 
-      <Box sx={{ marginTop: 4, padding: 2, backgroundColor: props.toggleStyle.backgroundColor, borderRadius: 2, boxShadow: 2 }}>
+      <Box sx={{ marginTop: 4,  backgroundColor: props.toggleStyle.backgroundColor, padding: 2, borderRadius: 2, boxShadow: 2 }}>
         <Typography variant="h6" sx={{ marginBottom: 2, textAlign: "center", color: props.toggleStyle.textColor }}>
-          Добавить задачу
+        Add Task
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center",  gap: 1 }}>
           <TaskInput
             addTask={addTask}
             toggleStyle={props.toggleStyle.iconColor}
@@ -157,7 +163,6 @@ export default function BasicDateRangeCalendar(props) {
         handleConfirm={handleRemoveTask}
         itemType="task"
       />
-      <ToastContainer />
     </>
   );
 }

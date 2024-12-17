@@ -1,11 +1,14 @@
+import { body, validationResult } from 'express-validator';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import helmet from 'helmet'; 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
+app.use(helmet()); 
 app.use(bodyParser.json());
 
 let notes = [];
@@ -16,11 +19,27 @@ app.get('/', (req, res) => {
     res.send('Welcome to the API!'); // Сообщение для корневого пути
 });
 // Заметки API
-app.post('/api/notes', (req, res) => {
+// app.post('/api/notes', (req, res) => {
+//     const note = { id: Date.now().toString(), ...req.body };
+//     console.log(req.body)
+//     notes.push(note);
+//     res.status(201).json({ message: 'Заметка добавлена!', note });
+// });
+
+app.post('/api/notes', 
+    body('title').notEmpty().withMessage('Title is required'),
+    body('details').notEmpty().withMessage('Details are required'),
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
     const note = { id: Date.now().toString(), ...req.body };
     notes.push(note);
     res.status(201).json(note);
-});
+    }
+);
+
 
 app.get('/api/notes', (req, res) => {
     res.json(notes);
@@ -102,6 +121,7 @@ app.use((err, req, res, next) => {
     res.status(500).send('Что-то пошло не так!');
 });
 
+
 // Logging middleware
 app.use((req, res, next) => {
     console.log(`${req.method} request для '${req.url}'`);
@@ -110,4 +130,11 @@ app.use((req, res, next) => {
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
+});
+// Обратная связь API
+app.post('/api/feedback', (req, res) => {
+    const feedback = req.body;
+    // Здесь вы можете обработать обратную связь (например, сохранить в базе данных или отправить на почту)
+    console.log('Feedback received:', feedback);
+    res.status(201).json({ message: 'Спасибо за ваш отзыв!' });
 });

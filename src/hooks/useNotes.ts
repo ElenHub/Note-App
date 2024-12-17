@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotes, addNote, updateNote, deleteNote } from '../redux/features/notesSlice';
-import { v4 as uuidv4 } from 'uuid';
 import { RootState } from '../types/type';
-import axios from 'axios'; 
 import { notesAPI } from '../api/notes-api';
 
 const useNotes = () => {
@@ -17,22 +15,20 @@ const useNotes = () => {
                 dispatch(setNotes(JSON.parse(savedNotes)));
             }
         };
-
         loadLocalNotes();
     }, [dispatch]);
 
-    const createNote =  async(note: { title: string, details: string, color: string, fontColor: string, category:string }) => {
+    const createNote = async (note) => {
         try {
-            const response = await notesAPI.createNotes(note.title, note.details,  note.color,  note.fontColor, note.category );
-            dispatch(addNote(response.data)); 
-            const updatedNotes = [...notes, response.data];
-            localStorage.setItem('notes', JSON.stringify(updatedNotes));
+            const response = await notesAPI.createNotes(note.title, note.details, note.color, note.fontColor, note.category);
+            dispatch(addNote(response.data));
+            localStorage.setItem('notes', JSON.stringify([...notes, response.data]));
         } catch (error) {
             console.error('Ошибка при создании заметки:', error);
         }
     };
 
-    const removeNote = async (id: string) => {
+    const removeNote = async (id) => {
         try {
             await notesAPI.deleteNotes(id);
             dispatch(deleteNote(id));
@@ -41,22 +37,18 @@ const useNotes = () => {
             console.error('Ошибка при удалении заметки:', error);
         }
     };
-    const editNote = async (id: string, title: string, details: string, color:string, fontColor:string, category:string ) => {
-        const noteData = { id, title, details, color, fontColor, category };
+
+    const updateNoteAsync = async (noteData) => {
         try {
-            const response = await notesAPI.updateNotes(id, title, details, color, fontColor, category);
-            dispatch(updateNote(noteData));
-            const updatedNotes = notes.map(note => note.id === id ? noteData : note);
-            localStorage.setItem('notes', JSON.stringify(updatedNotes));
+            const response = await notesAPI.updateNotes(noteData.id, noteData.title, noteData.details, noteData.color, noteData.fontColor, noteData.category);
+            dispatch(updateNote(response.data));
+            localStorage.setItem('notes', JSON.stringify(notes.map(note => note.id === noteData.id ? response.data : note)));
         } catch (error) {
             console.error('Ошибка при обновлении заметки:', error);
         }
     };
 
-    return { notes, createNote, editNote, removeNote };
+    return { notes, createNote, updateNoteAsync, removeNote };
 };
 
 export default useNotes;
-
-
-

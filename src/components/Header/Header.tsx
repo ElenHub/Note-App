@@ -1,4 +1,4 @@
-import { MdLightMode, MdDarkMode, MdNotifications, MdCalendarMonth } from 'react-icons/md';
+import { MdLightMode, MdDarkMode, MdCalendarMonth, MdFeedback  } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import './Header.module.css';
@@ -10,7 +10,7 @@ interface HeaderProps {
         iconColor: string;
     };
     handleToggleDarkMode: () => void;
-    isBeer: boolean;
+    darkMode: boolean;
 }
 
 const Header:React.FC<HeaderProps> = (props) => {
@@ -22,21 +22,24 @@ const Header:React.FC<HeaderProps> = (props) => {
                 </Typography>
                 <Link to="/calendar" style={{ textDecoration: 'none' }}>
                     <IconButton   sx={{ color: props.toggleStyle.iconColor,  '&:hover': {
-                        transform: 'scale(1.1)', // Увеличение при наведении
-                        transition: 'transform 0.2s', // Плавный переход
+                        transform: 'scale(1.1)',
+                        transition: 'transform 0.2s', 
                     }  }}> {/* Исправлено */}
                         <MdCalendarMonth />
                     </IconButton>
+                 
                 </Link>
+                <Link to="/feedback" style={{ textDecoration: 'none' }}>
                 <IconButton   sx={{ color: props.toggleStyle.iconColor, '&:hover': {
-                        transform: 'scale(1.1)', // Увеличение при наведении
-                        transition: 'transform 0.2s', // Плавный переход
+                        transform: 'scale(1.1)',
+                        transition: 'transform 0.2s', 
                     }  }}>
-                    <MdNotifications />
+                    <MdFeedback/>
                 </IconButton>
+                </Link>
                 <IconButton   sx={{ color: props.toggleStyle.iconColor,  '&:hover': {
-                        transform: 'scale(1.1)', // Увеличение при наведении
-                        transition: 'transform 0.2s', // Плавный переход
+                        transform: 'scale(1.1)',
+                        transition: 'transform 0.2s', 
                     }  }} onClick={props.handleToggleDarkMode}>
                     {props.darkMode ?  <MdLightMode />:<MdDarkMode /> }
                 </IconButton>
@@ -45,4 +48,4 @@ const Header:React.FC<HeaderProps> = (props) => {
     );
 };
 
-export default Header;
+export default Header
