@@ -30,7 +30,6 @@ function App() {
         <main style={{ minHeight: '100vh' }} className={darkMode ? 'dark-mode' : ''}>
             <div className="container">
                     <ToastContainer />
-                
                     <Routes>
                         <Route path="/" element={<Note notes={notes} handleToggleDarkMode={handleToggleDarkMode} toggleStyle={toggleStyle} darkMode={darkMode}/>} />
                         <Route path="/calendar" element={<BasicDateRangeCalendar toggleStyle={toggleStyle} />} />

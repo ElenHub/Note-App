@@ -5,8 +5,10 @@ import store from '../src/store/store.ts'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
+const baseUrl = import.meta.env.VITE_BASE_URL || '/Note-App/';
+
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
+  <BrowserRouter basename={baseUrl}>
   <Provider store={store}>
     <App/>
     </Provider>

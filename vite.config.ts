@@ -16,6 +16,6 @@ export default defineConfig(({ mode }) => {
     define: {
       __APP_ENV__: JSON.stringify(env.APP_ENV),
     },
-    // Дополнительные конфигурации могут быть здесь
+    base: env.VITE_BASE_URL || '/Note-App/',
   }
 })
